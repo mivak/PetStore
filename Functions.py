@@ -1,7 +1,7 @@
 import RequestsFunctions
 
 
-def get_available_pets_count(status):
+def get_pets_count(status):
     """
     Find pets count by status
     :param status: string - status of pets (e.g. sold, pending, available)
