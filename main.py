@@ -12,7 +12,7 @@ class TestPets(unittest.TestCase):
     def test_001_available_pets_count(self):
         status = 'available'
         actual_pets_count = Functions.get_pets_count(status)
-        expected_pets_count = 656
+        expected_pets_count = 655
         message = f"Pets count is {actual_pets_count} instead of {expected_pets_count}"
         self.assertEqual(expected_pets_count, actual_pets_count, message)
 
@@ -35,7 +35,6 @@ class TestPets(unittest.TestCase):
 
         added_pet_name = pet["name"]
         added_pet_status = pet["status"]
-
         # actual_count = Functions.get_pets_count(status)
 
         message_name = f'Name of created pet with id {self.pet_id} is {added_pet_name} instead of {name}'
@@ -49,23 +48,23 @@ class TestPets(unittest.TestCase):
     def test_003_updating_pet_status_to_sold(self):
         status = 'sold'
         pet = RequestsFunctions.get_pet_by_id(self.pet_id)
-        name = pet["name"]
-
-        RequestsFunctions.update_pet(self.pet_id, name, status)
-
-        updated_pet = RequestsFunctions.get_pet_by_id(self.pet_id)
-        updated_status = updated_pet["status"]
 
         seconds = 0
-        while updated_status != status:
+        while pet is None:
             time.sleep(1)
-            updated_pet = RequestsFunctions.get_pet_by_id(self.pet_id)
-            updated_status = updated_pet["status"]
             seconds += 1
+            pet = RequestsFunctions.get_pet_by_id(self.pet_id)
 
             if seconds > 10:
-                print(f'Status of pet with id {self.pet_id} was not updated to {status}')
+                print(f'Pet with id {self.pet_id} was not found to update')
                 break
+
+        pet["status"] = status
+
+        RequestsFunctions.update_existing_pet(pet)
+        time.sleep(2)
+        updated_pet = RequestsFunctions.get_pet_by_id(self.pet_id)
+        updated_status = updated_pet["status"]
 
         message = f'Status is {updated_status} instead of {status}'
         self.assertEqual(status, updated_status, message)

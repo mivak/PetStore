@@ -20,7 +20,7 @@ def get_unique_pet_id():
     """
     unique_id = 0
 
-    for i in range(1, 100000):
+    for i in range(1000, 100000):
         if RequestsFunctions.get_pet_by_id(i) is None:
             unique_id = i
             break

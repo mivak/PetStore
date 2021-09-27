@@ -6,7 +6,7 @@ def get_pets_by_status(status):
     """
     Gets all pets by status
     :param status: string - new status that will be updated (e.g. sold, pending, available)
-    :return: JSON - request response
+    :return: List of dictionaries
     """
     url = 'https://petstore.swagger.io/v2/pet/findByStatus?status=available'
     response = requests.get(url=url)
@@ -23,7 +23,7 @@ def add_new_pet(name, unique_id):
     Send POST request to add a new pet by name and id
     :param name: string, the name of the pet to add
     :param unique_id: int - the id of the pet to add (should be unique)
-    :return: JSON - request response
+    :return: Dictionary
     """
     url = "https://petstore.swagger.io/v2/pet"
 
@@ -58,33 +58,14 @@ def add_new_pet(name, unique_id):
     return response.json()
 
 
-def update_pet(pet_id, name, status):
+def update_existing_pet(pet):
     """
-    Update status of existing pet
-    :param pet_id: int - id of existing pet
-    :param name: string - name that will be updated
-    :param status: string - new status that will be updated (e.g. sold, pending, available)
-    :return: JSON - request response
+    Update existing pet object
+    :param pet: pet object
+    :return: Dictionary
     """
     url = "https://petstore.swagger.io/v2/pet"
-    body = {
-      "id": pet_id,
-      "category": {
-        "id": 0,
-        "name": "string"
-      },
-      "name": name,
-      "photoUrls": [
-        "string"
-      ],
-      "tags": [
-        {
-          "id": 0,
-          "name": "string"
-        }
-      ],
-      "status": status
-    }
+    body = pet
 
     headers = {"Content-Type": "application/json",
                "Accept": "*/*",
@@ -102,7 +83,7 @@ def delete_pet(pet_id):
     """
     Delete a pet by id
     :param pet_id:
-    :return: JSON - request response
+    :return: Dictionary
     """
     url = f"https://petstore.swagger.io/v2/pet/{pet_id}"
 
@@ -118,7 +99,7 @@ def get_pet_by_id(pet_id):
     """
     Get single pet by id
     :param pet_id: int: The id of the pet to get
-    :return: JSON - request response if status code is 200, else: None
+    :return: Dictionary
     """
     url = f"https://petstore.swagger.io/v2/pet/{pet_id}"
     response = requests.get(url=url)
